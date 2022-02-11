@@ -18,3 +18,7 @@ To install the <chart-name> chart:
 To uninstall the chart:
 
     helm delete my-<chart-name>
+
+## Credits
+
+This repo was setup using the tutorial from https://harness.io/blog/helm-chart-repo/
