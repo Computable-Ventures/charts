@@ -1,0 +1,50 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ template "helpers.fullname" . }}-cronjob
+  namespace: {{ .Values.namespace }}
+labels: {{- include "helpers.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.schedule }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          imagePullSecrets:
+            - name: ghcr-credentials
+          containers:
+            - name: {{ .Chart.Name }}
+              image: "{{ .Values.scraper.image.repository }}:{{ .Values.scraper.image.version }}"
+              imagePullPolicy: {{ .Values.scraper.image.pullPolicy }}
+              env:
+                - name: APP_VERSION
+                  value: "{{ .Values.image.version }}"
+{{- range $name, $value := .Values.env.open }}
+{{- if not (empty $value) }}
+                - name: {{ $name | quote }}
+                  value: {{ $value | quote }}
+{{- end }}
+{{- end }}
+{{- if .Values.env.existingSecret }}
+{{- $secret_name := .Values.env.existingSecret }}
+{{- range $name, $key := .Values.env.existingSecretMappings }}
+{{- if not ( empty $key) }}
+                - name: {{ $name | quote }}
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ $secret_name | quote }}
+                      key: {{ $key | quote }}
+{{- end }}
+{{- end }}
+{{- end }}
+              resources: {{ toYaml .Values.scraper.resources | nindent 22 }}
+              securityContext:
+                allowPrivilegeEscalation: true
+                capabilities:
+                  drop:
+                    - ALL
+                  add:
+                    - NET_BIND_SERVICE
+                readOnlyRootFilesystem: true
+                runAsUser: 65534
