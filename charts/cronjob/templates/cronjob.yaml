@@ -5,7 +5,7 @@ metadata:
   namespace: {{ .Values.namespace }}
 labels: {{- include "helpers.labels" . | nindent 2 }}
 spec:
-  schedule: {{ .Values.schedule }}
+  schedule: "{{ .Values.schedule }}"
   jobTemplate:
     spec:
       template:
