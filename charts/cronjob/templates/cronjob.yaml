@@ -3,7 +3,6 @@ kind: CronJob
 metadata:
   name: {{ template "helpers.fullname" . }}-cronjob
   namespace: {{ .Values.namespace }}
-labels: {{- include "helpers.labels" . | nindent 2 }}
 spec:
   schedule: "{{ .Values.schedule }}"
   jobTemplate:
