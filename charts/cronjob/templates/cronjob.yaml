@@ -12,7 +12,7 @@ spec:
         spec:
           restartPolicy: OnFailure
           imagePullSecrets:
-            - name: ghcr-credentials
+            - name: ghcr
           containers:
             - name: {{ .Chart.Name }}
               image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
