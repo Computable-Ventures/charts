@@ -7,7 +7,7 @@ schedule: "1 * * * *"
 image:
   pullPolicy: IfNotPresent
   repository: 533806089962.dkr.ecr.eu-central-1.amazonaws.com/portfolio-qplix-scraper
-  version: 0.1.0
+  tag: 0.1.0
 
 resources:
   limits:

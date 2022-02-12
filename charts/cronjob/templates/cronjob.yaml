@@ -15,8 +15,8 @@ spec:
             - name: ghcr-credentials
           containers:
             - name: {{ .Chart.Name }}
-              image: "{{ .Values.scraper.image.repository }}:{{ .Values.scraper.image.version }}"
-              imagePullPolicy: {{ .Values.scraper.image.pullPolicy }}
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
               env:
                 - name: APP_VERSION
                   value: "{{ .Values.image.version }}"
@@ -38,7 +38,7 @@ spec:
 {{- end }}
 {{- end }}
 {{- end }}
-              resources: {{ toYaml .Values.scraper.resources | nindent 22 }}
+              resources: {{ toYaml .Values.resources | nindent 22 }}
               securityContext:
                 allowPrivilegeEscalation: true
                 capabilities:
