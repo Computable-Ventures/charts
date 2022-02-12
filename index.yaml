@@ -3,6 +3,16 @@ entries:
   cronjob:
   - apiVersion: v2
     appVersion: 0.1.0
+    created: "2022-02-12T21:06:53.846271288Z"
+    description: A Helm chart for cronjobs
+    digest: a490852b5ff6bbf54fb98aced1930c43c6deac329f84e80c8355d6c4eb9a4c10
+    name: cronjob
+    type: application
+    urls:
+    - https://github.com/Computable-Ventures/charts/releases/download/cronjob-0.1.5/cronjob-0.1.5.tgz
+    version: 0.1.5
+  - apiVersion: v2
+    appVersion: 0.1.0
     created: "2022-02-12T20:57:43.224780022Z"
     description: A Helm chart for cronjobs
     digest: dd990cc35f570b4dfe768296d734550597b7ca773feaf192c277a82b3f1a68e2
@@ -51,4 +61,4 @@ entries:
     urls:
     - https://github.com/Computable-Ventures/charts/releases/download/cronjob-0.1.0/cronjob-0.1.0.tgz
     version: 0.1.0
-generated: "2022-02-12T20:57:43.224903332Z"
+generated: "2022-02-12T21:06:53.846293888Z"
