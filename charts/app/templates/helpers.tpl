@@ -50,7 +50,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 Create the name of the service account to use
 */}}
 {{- define "helpers.serviceAccountName" -}}
-{{- if .Values.serviceAccount.enabled }}
+{{- if .Values.serviceAccount.create }}
 {{- default (include "helpers.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
