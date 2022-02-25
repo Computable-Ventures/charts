@@ -3,6 +3,16 @@ entries:
   app:
   - apiVersion: v2
     appVersion: 0.1.0
+    created: "2022-02-25T22:56:04.140677088Z"
+    description: A Helm chart for apps
+    digest: 789a183089de66c197a003ac185b9e2340addc8bd89250372f5ecce962017123
+    name: app
+    type: application
+    urls:
+    - https://github.com/Computable-Ventures/charts/releases/download/app-0.1.2/app-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: 0.1.0
     created: "2022-02-25T22:53:06.511144655Z"
     description: A Helm chart for apps
     digest: d78c17244e8adcd4d956fd3590839f67d0cc777d8920e80c668996f5d7cc57ba
@@ -102,4 +112,4 @@ entries:
     urls:
     - https://github.com/Computable-Ventures/charts/releases/download/cronjob-0.1.0/cronjob-0.1.0.tgz
     version: 0.1.0
-generated: "2022-02-25T22:53:06.511227219Z"
+generated: "2022-02-25T22:56:04.140723488Z"
