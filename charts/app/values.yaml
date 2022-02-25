@@ -1,0 +1,97 @@
+namespace: apps
+
+nameOverride:
+
+annotations: {}
+
+service:
+  create: true
+  httpPort: 8000
+  externalPort: 80
+  type: ClusterIP
+  nodePort: # if service.type == NodePort
+
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}
+  automountServiceAccountToken: false
+
+image:
+  pullPolicy: IfNotPresent
+  repository: ...
+  tag: 0.1.0
+  pullSecretName: ghcr
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 64Mi
+
+env:
+  # Contains transparent environment variables
+  open:
+    LOG_LEVEL: info
+  # Stores secret environment variables
+  existingSecret:
+  existingSecretMappings:
+    # Map keys from existing secret to environment variable names
+    ENV_VAR_NAME: key-name
+
+deployment:
+  args: []
+  command: []
+  replicaCount: 1
+  terminationGracePeriodSeconds: 30
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+  livenessProbe:
+    enabled: true
+    path: /healthz
+    scheme: HTTP
+    initialDelaySeconds: 120
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  readinessProbe:
+    enabled: true
+    path: /healthz
+    scheme: HTTP
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  startupProbe:
+    enabled: false
+    path: /healthz
+    scheme: HTTP
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+
+podSecurityContext:
+  enabled: true
+  runAsUser: 1001
+  fsGroup: 1001
+  runAsNonRoot: true
+
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+  allowPrivilegeEscalation: true
+  capabilities:
+    drop:
+      - ALL
+    add:
+      - NET_BIND_SERVICE
+  readOnlyRootFilesystem: true
+  runAsUser: 65534

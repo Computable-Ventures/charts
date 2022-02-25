@@ -1,0 +1,96 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "helpers.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "helpers.labels" . | nindent 4 }}
+  annotations: {{ toYaml .Values.annotations | nindent 4 }}
+spec:
+  replicas: {{ .Values.deployment.replicaCount }}
+  selector:
+    matchLabels: {{- include "helpers.selectorLabels" . | nindent 6 }}
+  strategy: {{ toYaml .Values.deployment.strategy | nindent 4 }}
+  template:
+    metadata:
+      labels: {{- include "helpers.labels" . | nindent 8 }}
+      annotations: {{ toYaml .Values.annotations | nindent 8 }}
+    spec:
+      serviceAccountName: {{ template "helpers.serviceAccountName" . }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      imagePullSecrets:
+        - name: {{ .Values.image.pullSecretName }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ include "helpers.name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          command: {{ .Values.deployment.command }}
+          args: {{ .Values.deployment.args }}
+          resources: {{ toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: APP_VERSION
+              value: "{{ .Values.image.version }}"
+{{- range $name, $value := .Values.env.open }}
+{{- if not (empty $value) }}
+            - name: {{ $name | quote }}
+              value: {{ $value | quote }}
+{{- end }}
+{{- end }}
+{{- if .Values.env.existingSecret }}
+{{- $secret_name := .Values.env.existingSecret }}
+{{- range $name, $key := .Values.env.existingSecretMappings }}
+{{- if not ( empty $key) }}
+            - name: {{ $name | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secret_name | quote }}
+                  key: {{ $key | quote }}
+{{- end }}
+{{- end }}
+{{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.httpPort }}
+              protocol: TCP
+          {{- if .Values.deployment.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.deployment.livenessProbe.path }}
+              port: {{ .Values.service.httpPort }}
+              scheme: {{ .Values.deployment.livenessProbe.scheme }}
+            initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.deployment.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.deployment.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.deployment.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.deployment.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.deployment.readinessProbe.path }}
+              port: {{ .Values.service.httpPort }}
+              scheme: {{ .Values.deployment.readinessProbe.scheme }}
+            initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.deployment.readinessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.deployment.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: {{ .Values.deployment.startupProbe.path }}
+              port: {{ .Values.service.httpPort }}
+              scheme: {{ .Values.deployment.startupProbe.scheme }}
+            initialDelaySeconds: {{ .Values.deployment.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.deployment.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.deployment.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.deployment.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.deployment.startupProbe.failureThreshold }}
+          {{- end }}
