@@ -5,8 +5,8 @@ metadata:
   namespace: {{ .Values.namespace }}
 spec:
   schedule: "{{ .Values.job.schedule }}"
-  failedJobsHistoryLimit: "{{ .Values.job.failedJobsHistoryLimit }}"
-  successfulJobsHistoryLimit: "{{ .Values.job.successfulJobsHistoryLimit }}"
+  failedJobsHistoryLimit: {{ .Values.job.failedJobsHistoryLimit }}
+  successfulJobsHistoryLimit: {{ .Values.job.successfulJobsHistoryLimit }}
   jobTemplate:
     spec:
       template:
