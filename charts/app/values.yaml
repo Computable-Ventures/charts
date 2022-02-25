@@ -39,7 +39,7 @@ env:
   existingSecret:
   existingSecretMappings:
     # Map keys from existing secret to environment variable names
-    ENV_VAR_NAME: key-name
+    # ENV_VAR_NAME: key-name
 
 deployment:
   args: []
