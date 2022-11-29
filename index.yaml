@@ -135,6 +135,16 @@ entries:
   hook:
   - apiVersion: v2
     appVersion: 0.1.0
+    created: "2022-11-29T19:38:54.456622749Z"
+    description: A Helm chart for a simple hook
+    digest: cb4f4c0490163c25226ec54bcd2e3f906dd5a9f23356da62a36949d8b312f4e1
+    name: hook
+    type: application
+    urls:
+    - https://github.com/Computable-Ventures/charts/releases/download/hook-0.2.0/hook-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 0.1.0
     created: "2022-11-29T19:25:17.533360044Z"
     description: A Helm chart for a simple hook
     digest: e7fd93d1d8cae8eb755e540763dffc920977a9599f0927d1bda9188bc7c93286
@@ -143,4 +153,4 @@ entries:
     urls:
     - https://github.com/Computable-Ventures/charts/releases/download/hook-0.1.0/hook-0.1.0.tgz
     version: 0.1.0
-generated: "2022-11-29T19:25:17.533392044Z"
+generated: "2022-11-29T19:38:54.456652049Z"
