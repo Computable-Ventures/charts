@@ -1,0 +1,49 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "helpers.fullname" . }}
+  labels: {{ include "helpers.labels" . | nindent 4 }}
+  annotations: {{ toYaml .Values.job.annotations | nindent 4 }}
+spec:
+  template:
+    metadata:
+      name: {{ include "helpers.fullname" . }}
+    spec:
+      terminationGracePeriodSeconds: {{ .Values.job.terminationGracePeriodSeconds }}
+      restartPolicy: {{ .Values.job.restartPolicy }}
+      imagePullSecrets:
+        - name: {{ .Values.image.pullSecretName }}
+      serviceAccountName: {{ template "helpers.serviceAccountName" . }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ include "helpers.name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          command: {{ .Values.job.command }}
+          args: {{ .Values.job.args }}
+          env:
+            {{- range $name, $value := .Values.job.env.open }}
+            {{- if not (empty $value) }}
+            - name: {{ $name | quote }}
+              value: {{ $value | quote }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.job.env.existingSecret }}
+            {{- $secret_name := .Values.job.env.existingSecret }}
+            {{- range $name, $key := .Values.job.env.existingSecretMappings }}
+            {{- if not ( empty $key) }}
+            - name: {{ $name | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secret_name | quote }}
+                  key: {{ $key | quote }}
+            {{- end }}
+            {{- end }}
+            {{- end }}
+          resources: {{ toYaml .Values.resources | nindent 12 }}
