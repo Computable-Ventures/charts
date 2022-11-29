@@ -132,4 +132,15 @@ entries:
     urls:
     - https://github.com/Computable-Ventures/charts/releases/download/cronjob-0.1.0/cronjob-0.1.0.tgz
     version: 0.1.0
-generated: "2022-02-25T23:08:25.263219072Z"
+  hook:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2022-11-29T19:25:17.533360044Z"
+    description: A Helm chart for a simple hook
+    digest: e7fd93d1d8cae8eb755e540763dffc920977a9599f0927d1bda9188bc7c93286
+    name: hook
+    type: application
+    urls:
+    - https://github.com/Computable-Ventures/charts/releases/download/hook-0.1.0/hook-0.1.0.tgz
+    version: 0.1.0
+generated: "2022-11-29T19:25:17.533392044Z"
