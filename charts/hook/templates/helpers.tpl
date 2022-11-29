@@ -45,14 +45,3 @@ helm.sh/chart: {{ include "helpers.chart" . }}
 {{ include "helpers.selectorLabels" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
-
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "helpers.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "helpers.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
-{{- end }}

@@ -14,7 +14,6 @@ spec:
       restartPolicy: {{ .Values.job.restartPolicy }}
       imagePullSecrets:
         - name: {{ .Values.image.pullSecretName }}
-      serviceAccountName: {{ template "helpers.serviceAccountName" . }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
